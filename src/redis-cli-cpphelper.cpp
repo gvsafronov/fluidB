@@ -25,7 +25,7 @@ extern "C" {
 #include "zmalloc.h"
 #include "storage.h"
 
-#include "clif.h"
+#include "redis-cli.h"
 
 static dict *clusterManagerGetLinkStatus(void);
 static clusterManagerNode *clusterManagerNodeMasterRandom();
