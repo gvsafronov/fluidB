@@ -21,8 +21,7 @@ Good example is to think of fluidB as a more complex version of memcached, where
 ## Gratitudes
 
 * **Salvatore Sanfilippo (antirez)**, I would like to express our gratitude for all that you have done!!! Thank you.
-* **Oran Agra**, **Yossi Gottlieb** I wish to express my appreciation for all your efforts!!!
-* **John Sully** Many thanks for everything you have done for us!!!
+* **John Sully**, **Ben Shermel** I wish to express my appreciation for all your efforts!!!
 <br/><br/>
 
 New Configuration Options
