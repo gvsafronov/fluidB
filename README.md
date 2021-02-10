@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://fluidb.icu"><img src="/img/Logo.png" alt="fluidB"></a>
+  <a href="https://fluidb.icu"><img src="/img/logo.png" alt="fluidB"></a>
 </p>
 <p align="center">
     
