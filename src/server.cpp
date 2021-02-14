@@ -2607,7 +2607,7 @@ void initServerConfig(void) {
 
     /* Command table -- we initialize it here as it is part of the
      * initial configuration, since command names may be changed via
-     * keydb.conf using the rename-command directive. */
+     * fludiB.conf using the rename-command directive. */
     g_pserver->commands = dictCreate(&commandTableDictType,NULL);
     g_pserver->orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
@@ -2639,7 +2639,7 @@ void initServerConfig(void) {
     /* By default we want scripts to be always replicated by effects
      * (single commands executed by the script), and not by sending the
      * script to the replica / AOF. This is the new way starting from
-     * Redis 5. However it is possible to revert it via keydb.conf. */
+     * Redis 5. However it is possible to revert it via fluidB.conf. */
     g_pserver->lua_always_replicate_commands = 1;
 
     /* Multithreading */
@@ -3352,7 +3352,7 @@ int populateCommandTableParseFlags(struct redisCommand *c, const char *strflags)
     return C_OK;
 }
 
-/* Populates the KeyDB Command Table starting from the hard coded list
+/* Populates the fluidB Command Table starting from the hard coded list
  * we have on top of server.cpp file. */
 void populateCommandTable(void) {
     int j;
@@ -3370,7 +3370,7 @@ void populateCommandTable(void) {
         c->id = ACLGetCommandID(c->name); /* Assign the ID used for ACL. */
         retval1 = dictAdd(g_pserver->commands, sdsnew(c->name), c);
         /* Populate an additional dictionary that will be unaffected
-         * by rename-command statements in keydb.conf. */
+         * by rename-command statements in fluidB.conf. */
         retval2 = dictAdd(g_pserver->orig_commands, sdsnew(c->name), c);
         serverAssert(retval1 == DICT_OK && retval2 == DICT_OK);
     }
@@ -3445,7 +3445,7 @@ struct redisCommand *lookupCommandByCString(const char *s) {
 
 /* Lookup the command in the current table, if not found also check in
  * the original table containing the original command names unaffected by
- * keydb.conf rename-command statement.
+ * fluidb.conf rename-command statement.
  *
  * This is used by functions rewriting the argument vector such as
  * rewriteClientCommandVector() in order to set client->cmd pointer
@@ -4218,7 +4218,7 @@ int prepareForShutdown(int flags) {
     }
 
     serverLog(LL_WARNING,"%s is now ready to exit, bye bye...",
-        g_pserver->sentinel_mode ? "Sentinel" : "KeyDB");
+        g_pserver->sentinel_mode ? "Sentinel" : "fluidB");
 
     return C_OK;
 }
@@ -5131,7 +5131,7 @@ void linuxMemoryWarnings(void) {
         serverLog(LL_WARNING,"WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.");
     }
     if (THPIsEnabled()) {
-        serverLog(LL_WARNING,"WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with KeyDB. To fix this issue run the command 'echo madvise > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. KeyDB must be restarted after THP is disabled (set to 'madvise' or 'never').");
+        serverLog(LL_WARNING,"WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with fluidB. To fix this issue run the command 'echo madvise > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. fluidB must be restarted after THP is disabled (set to 'madvise' or 'never').");
     }
 }
 
@@ -5285,19 +5285,19 @@ void version(void) {
 }
 
 void usage(void) {
-    fprintf(stderr,"Usage: ./keydb-server [/path/to/keydb.conf] [options]\n");
-    fprintf(stderr,"       ./keydb-server - (read config from stdin)\n");
-    fprintf(stderr,"       ./keydb-server -v or --version\n");
-    fprintf(stderr,"       ./keydb-server -h or --help\n");
-    fprintf(stderr,"       ./keydb-server --test-memory <megabytes>\n\n");
+    fprintf(stderr,"Usage: ./fluidb-serv [/path/to/fluidb.conf] [options]\n");
+    fprintf(stderr,"       ./fluidb-serv - (read config from stdin)\n");
+    fprintf(stderr,"       ./fluidb-serv -v or --version\n");
+    fprintf(stderr,"       ./fluidb-serv -h or --help\n");
+    fprintf(stderr,"       ./fluidb-serv --test-memory <megabytes>\n\n");
     fprintf(stderr,"Examples:\n");
-    fprintf(stderr,"       ./keydb-server (run the server with default conf)\n");
-    fprintf(stderr,"       ./keydb-server /etc/redis/6379.conf\n");
-    fprintf(stderr,"       ./keydb-server --port 7777\n");
-    fprintf(stderr,"       ./keydb-server --port 7777 --replicaof 127.0.0.1 8888\n");
-    fprintf(stderr,"       ./keydb-server /etc/mykeydb.conf --loglevel verbose\n\n");
+    fprintf(stderr,"       ./fluidb-serv (run the server with default conf)\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/redis/6379.conf\n");
+    fprintf(stderr,"       ./fluidb-serv --port 7777\n");
+    fprintf(stderr,"       ./fluidb-serv --port 7777 --replicaof 127.0.0.1 8888\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/myfluidb.conf --loglevel verbose\n\n");
     fprintf(stderr,"Sentinel mode:\n");
-    fprintf(stderr,"       ./keydb-server /etc/sentinel.conf --sentinel\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/sentinel.conf --sentinel\n");
     exit(1);
 }
 
@@ -5312,7 +5312,7 @@ void redisAsciiArt(void) {
 
     /* Show the ASCII logo if: log file is stdout AND stdout is a
      * tty AND syslog logging is disabled. Also show logo if the user
-     * forced us to do so via keydb.conf. */
+     * forced us to do so via fluidb.conf. */
     int show_logo = ((!g_pserver->syslog_enabled &&
                       g_pserver->logfile[0] == '\0' &&
                       isatty(fileno(stdout))) ||
@@ -5812,7 +5812,7 @@ int main(int argc, char **argv) {
                 exit(0);
             } else {
                 fprintf(stderr,"Please specify the amount of memory to test in megabytes.\n");
-                fprintf(stderr,"Example: ./keydb-server --test-memory 4096\n\n");
+                fprintf(stderr,"Example: ./fluidb-serv --test-memory 4096\n\n");
                 exit(1);
             }
         }
@@ -5875,9 +5875,9 @@ int main(int argc, char **argv) {
     int background = cserver.daemonize && !cserver.supervised;
     if (background) daemonize();
 
-    serverLog(LL_WARNING, "oO0OoO0OoO0Oo KeyDB is starting oO0OoO0OoO0Oo");
+    serverLog(LL_WARNING, "oO0OoO0OoO0Oo fluidB is starting oO0OoO0OoO0Oo");
     serverLog(LL_WARNING,
-        "KeyDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
+        "fluidB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
             KEYDB_REAL_VERSION,
             (sizeof(long) == 8) ? 64 : 32,
             redisGitSHA1(),
