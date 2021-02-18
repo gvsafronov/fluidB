@@ -99,8 +99,8 @@ int spectrum_palette_size;
 
 int g_fInCrash = 0;
 
-const char *motd_url = "http://api.keydb.dev/motd/motd_cli.txt";
-const char *motd_cache_file = "/.keydb-cli-motd";
+const char *motd_url = "";
+const char *motd_cache_file = "";
 
 /*------------------------------------------------------------------------------
  * Utility functions
@@ -125,13 +125,17 @@ static long long mstime(void) {
 static void cliRefreshPrompt(void) {
     if (config.eval_ldb) return;
 
+
+printf("\n");
+printf("\n");
+
     sds prompt = sdsempty();
     if (config.hostsocket != NULL) {
-        prompt = sdscatfmt(prompt,"redis %s",config.hostsocket);
+        prompt = sdscatfmt(prompt,"fluidb %s",config.hostsocket);
     } else {
         char addr[256];
         anetFormatAddr(addr, sizeof(addr), config.hostip, config.hostport);
-        prompt = sdscatlen(prompt,addr,strlen(addr));
+        //prompt = sdscatlen(prompt,addr,strlen(addr));
     }
 
     /* Add [dbnum] if needed */
@@ -139,7 +143,7 @@ static void cliRefreshPrompt(void) {
         prompt = sdscatfmt(prompt,"[%i]",config.dbnum);
 
     /* Copy the prompt in the static buffer. */
-    prompt = sdscatlen(prompt,"> ",2);
+    prompt = sdscatlen(prompt,"fluidb:~> ", 9);
     snprintf(config.prompt,sizeof(config.prompt),"%s",prompt);
     sdsfree(prompt);
 }
@@ -412,14 +416,14 @@ static void cliOutputCommandHelp(struct commandHelp *help, int group) {
 static void cliOutputGenericHelp(void) {
     sds version = cliVersion();
     printf(
-        "keydb-cli %s\n"
+        "clif %s\n"
         "To get help about Redis commands type:\n"
         "      \"help @<group>\" to get a list of commands in <group>\n"
         "      \"help <command>\" for help on <command>\n"
         "      \"help <tab>\" to get a list of possible help topics\n"
         "      \"quit\" to exit\n"
         "\n"
-        "To set keydb-cli preferences:\n"
+        "To set clif preferences:\n"
         "      \":set hints\" enable online hints\n"
         "      \":set nohints\" disable online hints\n"
         "Set your preferences in ~/.redisclirc\n",
@@ -1449,7 +1453,7 @@ static int parseOptions(int argc, char **argv) {
 #endif
         } else if (!strcmp(argv[i],"-v") || !strcmp(argv[i], "--version")) {
             sds version = cliVersion();
-            printf("keydb-cli %s\n", version);
+            printf("clif %s\n", version);
             sdsfree(version);
             exit(0);
         } else if (!strcmp(argv[i],"--no-motd")) {
@@ -1526,9 +1530,9 @@ static sds readArgFromStdin(void) {
 static void usage(void) {
     sds version = cliVersion();
     fprintf(stderr,
-"keydb-cli %s\n"
+"clif %s\n"
 "\n"
-"Usage: keydb-cli [OPTIONS] [cmd [arg [arg ...]]]\n"
+"Usage: clif [OPTIONS] [cmd [arg [arg ...]]]\n"
 "  -h <hostname>      Server hostname (default: 127.0.0.1).\n"
 "  -p <port>          Server port (default: 6379).\n"
 "  -s <socket>        Server socket (overrides hostname and port).\n"
@@ -1618,16 +1622,16 @@ static void usage(void) {
 "  Use --cluster help to list all available cluster manager commands.\n"
 "\n"
 "Examples:\n"
-"  cat /etc/passwd | keydb-cli -x set mypasswd\n"
-"  keydb-cli get mypasswd\n"
-"  keydb-cli -r 100 lpush mylist x\n"
-"  keydb-cli -r 100 -i 1 info | grep used_memory_human:\n"
-"  keydb-cli --eval myscript.lua key1 key2 , arg1 arg2 arg3\n"
-"  keydb-cli --scan --pattern '*:12345*'\n"
+"  cat /etc/passwd | clif -x set mypasswd\n"
+"  clif get mypasswd\n"
+"  clif -r 100 lpush mylist x\n"
+"  clif -r 100 -i 1 info | grep used_memory_human:\n"
+"  clif --eval myscript.lua key1 key2 , arg1 arg2 arg3\n"
+"  clif --scan --pattern '*:12345*'\n"
 "\n"
 "  (Note: when using --eval the comma separates KEYS[] from ARGV[] items)\n"
 "\n"
-"When no command is given, keydb-cli starts in interactive mode.\n"
+"When no command is given, clif starts in interactive mode.\n"
 "Type \"help\" in interactive mode for information on available commands\n"
 "and settings.\n"
 "\n");
@@ -1719,12 +1723,12 @@ void cliSetPreferences(char **argv, int argc, int interactive) {
         if (!strcasecmp(argv[1],"hints")) pref.hints = 1;
         else if (!strcasecmp(argv[1],"nohints")) pref.hints = 0;
         else {
-            printf("%sunknown keydb-cli preference '%s'\n",
+            printf("%sunknown clif preference '%s'\n",
                 interactive ? "" : ".redisclirc: ",
                 argv[1]);
         }
     } else {
-        printf("%sunknown keydb-cli internal command '%s'\n",
+        printf("%sunknown clif internal command '%s'\n",
             interactive ? "" : ".redisclirc: ",
             argv[0]);
     }
@@ -1796,7 +1800,7 @@ static void repl(void) {
                 repeat = strtol(argv[0], &endptr, 10);
                 if (argc > 1 && *endptr == '\0') {
                     if (errno == ERANGE || errno == EINVAL || repeat <= 0) {
-                        fputs("Invalid keydb-cli repeat command option value.\n", stdout);
+                        fputs("Invalid clif repeat command option value.\n", stdout);
                         sdsfreesplitres(argv, argc);
                         linenoiseFree(line);
                         continue;
@@ -4225,7 +4229,7 @@ int clusterManagerFixOpenSlot(int slot) {
         } else {
 unhandled_case:
             success = 0;
-            clusterManagerLogErr("[ERR] Sorry, keydb-cli can't fix this slot "
+            clusterManagerLogErr("[ERR] Sorry, clif can't fix this slot "
                                  "yet (work in progress). Slot is set as "
                                  "migrating in %s, as importing in %s, "
                                  "owner is %s:%d\n", migrating_str,
@@ -4447,7 +4451,7 @@ static void clusterManagerPrintNotClusterNodeError(clusterManagerNode *node,
     clusterManagerLogErr("[ERR] Node %s:%d %s\n", node->ip, node->port, msg);
 }
 
-/* Execute keydb-cli in Cluster Manager mode */
+/* Execute clif in Cluster Manager mode */
 static void clusterManagerMode(clusterManagerCommandProc *proc) {
     int argc = config.cluster_manager_command.argc;
     char **argv = config.cluster_manager_command.argv;
