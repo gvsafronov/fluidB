@@ -12,11 +12,10 @@
   <a href="https://fluidb.icu"><img src="/img/logo.png" alt="fluidB"></a>
 </p>
 <p align="center">
+  
+  ## Distributed Multimodel real-time in memory database management system
 
- 
-
-
-<!-- TABLE OF CONTENTS -->
+ <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
