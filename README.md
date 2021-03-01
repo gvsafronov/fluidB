@@ -1,22 +1,60 @@
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Thanks again! Now go create something AMAZING! :D
+-->
+
+
+
+<!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://fluidb.icu"><img src="/img/logo.png" alt="fluidB"></a>
 </p>
 <p align="center">
-    
 
-## About fluidB
+ 
 
 
-Fluidb is an open source (BSD-3-Clause License), in-memory database management system, distributed uder BSD-3-Clause License using code of [KeyDB](https://github.com/JohnSully/KeyDB), which also distributed uder BSD-3-Clause License. 
-The purpose of our project is to fix fundamental flaws in Redis, such as scaling, creating a multi-threaded server.
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#gratitudes">Gratitudes</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+Fluidb is an open source (BSD-3-Clause License), in-memory database management system, distributed uder BSD-3-Clause License using code of KeyDB, which also distributed uder BSD-3-Clause License. The purpose of our project is to fix fundamental flaws in Redis, such as scaling, creating a multi-threaded server.
 
 We do not have a docker image since docker, like any virtualization environment, forms an additional layer of abstraction that complicates both the development process itself and the program operation process. Our goal: "To create a high-performance subassembly that is as easy to use as possible"
 
-fluidB is often referred to as a *data structures* server. What this means is that fluidB provides access to mutable data structures via a set of commands, which are sent using a *server-client* model with TCP sockets and a simple protocol. So different processes can query and modify the same data structures in a shared way.
-The storage of fluidB is implemented as follows: data can be stored according to the "key-value" model, or can be stored as a graph, which is a chain of interrelated events (which are similar to frames from an old film strip), which together represent a description of some event.
+fluidB is often referred to as a data structures server. What this means is that fluidB provides access to mutable data structures via a set of commands, which are sent using a server-client model with TCP sockets and a simple protocol. So different processes can query and modify the same data structures in a shared way. The storage of fluidB is implemented as follows: data can be stored according to the "key-value" model, or can be stored as a graph, which is a chain of interrelated events (which are similar to frames from an old film strip), which together represent a description of some event.
 
 Good example is to think of fluidB as a more complex version of memcached, where the operations are not just SETs and GETs, but operations that work with complex data types like Lists, Sets, ordered data structures, and so forth.
-<br/><br/>
+
 
 ## Gratitudes
 
@@ -24,62 +62,102 @@ Good example is to think of fluidB as a more complex version of memcached, where
 * **John Sully**, **Ben Shermel** I wish to express my appreciation for all your efforts!!!
 <br/><br/>
 
-New Configuration Options
--------------------------
 
-With new features comes new options:
+<!-- GETTING STARTED -->
+## Getting Started
 
-    server-threads N
-    server-thread-affinity [true/false]
+Multithreading Architecture
+---------------------------
 
-The number of threads used to serve requests.  This should be related to the number of queues available in your network hardware, *not* the number of cores on your machine.  Because fluidB uses spinlocks to reduce latency; making this too high will reduce performance.  We recommend using 4 here.  By default this is set to one.
+fluidB works by running the normal Redis event loop on multiple threads.  Network IO, and query parsing are done concurrently.  Each connection is assigned a thread on accept().  Access to the core hash table is guarded by spinlock.  Because the hashtable access is extremely fast this lock has low contention.  Transactions hold the lock for the duration of the EXEC command.  Modules work in concert with the GIL which is only acquired when all server threads are paused.  This maintains the atomicity guarantees modules expect.
 
-    scratch-file-path /path
+Unlike most databases the core data structure is the fastest part of the system.  Most of the query time comes from parsing the REPL protocol and copying data to/from the network.
 
-If you would like to use the [FLASH backed](https://github.com/JohnSully/fluidB/wiki/FLASH-Storage) storage this option configures the directory for fluidB's temporary files.  This feature relies on snapshotting to work so must be used on a BTRFS filesystem.  ZFS may also work but is untested.  With this feature fluidB will use RAM as a cache and page to disk as necessary.  NOTE: This requires special compilation options, see Building fluidB below.
-    
-    db-s3-object /path/to/bucket
+Future work:
+ - Allow rebalancing of connections to different threads after the connection
+ - Allow multiple readers access to the hashtable concurrently
 
-If you would like fluidB to dump and load directly to AWS S3 this option specifies the bucket.  Using this option with the traditional RDB options will result in fluidB backing up twice to both locations.  If both are specified fluidB will first attempt to load from the local dump file and if that fails load from S3.  This requires the AWS CLI tools to be installed and configured which are used under the hood to transfer the data.
+### Prerequisites
 
-    active-replica yes
+1. Install gcc, g++ and all dependencies
 
-If you are using active-active replication set `active-replica` option to “yes”. This will enable both instances to accept reads and writes while remaining synced. [Click here](https://docs.fluidB.dev/docs/active-rep/) to see more on active-rep in our docs section. 
+  ```sh
+ sudo apt install build-essential nasm autotools-dev autoconf libjemalloc-dev tcl tcl-dev uuid-dev libcurl4-openssl-dev
+  ```
 
-All other configuration options behave as you'd expect.  Your existing configuration files should continue to work unchanged.
+### Installation
 
-Building fluidB
---------------
-
-fluidB can be compiled and is tested for use on Linux.  fluidB currently relies on SO_REUSEPORT's load balancing behavior which is available only in Linux.  When we support marshalling connections across threads we plan to support other operating systems such as FreeBSD.
-
-Install dependencies:
-
-    % sudo apt install build-essential nasm autotools-dev autoconf libjemalloc-dev tcl tcl-dev uuid-dev libcurl4-openssl-dev
-
-Compiling is as simple as:
-
-    % make
-
-To build with TLS support, you'll need OpenSSL development libraries (e.g.
-libssl-dev on Debian/Ubuntu) and run:
-
-    % make BUILD_TLS=yes
-
-To build with systemd support, you'll need systemd development libraries (such 
-as libsystemd-dev on Debian/Ubuntu or systemd-devel on CentOS) and run:
-
-    % make USE_SYSTEMD=yes
+1. Install gcc, g++ and all dependencies (see Prerequisites)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/gvsafronov/fluidb.git
+   ```
+3. Build project with make
+   ```sh
+   cd fluidb && make
+   ```
+4. To build with TLS support, you'll need OpenSSL development libraries (e.g. libssl-dev on Debian/Ubuntu) and run:`
+   ```
+   make BUILD_TLS=yes';
+   ```
+   
+### Running fluidB
 
 
-***Note that the following dependencies may be needed: 
-    % sudo apt-get install autoconf autotools-dev libnuma-dev libtool
+To run fluidB with the default configuration just type:
 
-If TLS is built, running the tests with TLS enabled (you will need `tcl-tls`
-installed):
+    $ cd src
+    $ ./fluidB-serv
 
-    % ./utils/gen-test-certs.sh
-    % ./runtest --tls
+ 
+
+If you want to provide your fluidB.conf, you have to run it using an additional
+parameter (the path of the configuration file):
+
+    $ ./fluidB-serv --port 9999 --replicaof 127.0.0.1 6379
+    $ ./fluidB-serv /etc/fluidB/6379.conf --loglevel debug
+
+All the options in fluidB.conf are also supported as options using the command
+line, with exactly the same name.
+
+It is possible to alter the fluidB configuration by passing parameters directly
+as options using the command line. Examples:
+
+    % ./fluidB-serv --port 9999 --replicaof 127.0.0.1 6379
+    % ./fluidB-serv /etc/fluidB/6379.conf --loglevel debug
+
+All the options in fluidB.conf are also supported as options using the command
+line, with exactly the same name.
+
+
+
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+_For useful examples of how a project can be used, please refer to the [Documentation](https://docs.keydb.dev/docs/intro/)_
+
+### Playing with fluidB
+
+
+You can use fluidB-cli to play with fluidB. Start a fluidB-server instance,
+then in another terminal try the following:
+
+    % cd src
+    % ./clif
+    fluidB> ping
+    PONG
+    fluidB:~> set foo bar
+    OK
+    fluidB:~> get foo
+    "bar"
+    fluidB:~> incr mycounter
+    (integer) 1
+    fluidB:~> incr mycounter
+    (integer) 2
+    fluidB:~>
+
+You can find the list of all the available commands at https://docs.fluidB.dev/docs/commands/
 
 
 Fixing build problems with dependencies or cached build options
@@ -128,109 +206,64 @@ If you want to see a more verbose output use the following:
 
     % make V=1
 
-Running fluidB
--------------
-
-To run fluidB with the default configuration just type:
-
-    % cd src
-    % ./fluidB-server
-
-If you want to provide your fluidB.conf, you have to run it using an additional
-parameter (the path of the configuration file):
-
-    % cd src
-    % ./fluidB-server /path/to/fluidB.conf
-
-It is possible to alter the fluidB configuration by passing parameters directly
-as options using the command line. Examples:
-
-    % ./fluidB-server --port 9999 --replicaof 127.0.0.1 6379
-    % ./fluidB-server /etc/fluidB/6379.conf --loglevel debug
-
-All the options in fluidB.conf are also supported as options using the command
-line, with exactly the same name.
 
 
-Running Redis with TLS:
-------------------
+<!-- ROADMAP -->
+## Roadmap
 
-Please consult the [TLS.md](TLS.md) file for more information on
-how to use Redis with TLS.
+See the [open issues](https://github.com/gvsafronov/fluidb/issues) for a list of proposed features (and known issues).
 
+## New Configuration Options
 
-Playing with fluidB
-------------------
+With new features comes new options:
 
-You can use fluidB-cli to play with fluidB. Start a fluidB-server instance,
-then in another terminal try the following:
+    server-threads N
+    server-thread-affinity [true/false]
 
-    % cd src
-    % ./fluidB-cli
-    fluidB> ping
-    PONG
-    fluidB:~> set foo bar
-    OK
-    fluidB:~> get foo
-    "bar"
-    fluidB:~> incr mycounter
-    (integer) 1
-    fluidB:~> incr mycounter
-    (integer) 2
-    fluidB:~>
+The number of threads used to serve requests.  This should be related to the number of queues available in your network hardware, *not* the number of cores on your machine.  Because fluidB uses spinlocks to reduce latency; making this too high will reduce performance.  We recommend using 4 here.  By default this is set to one.
 
-You can find the list of all the available commands at https://docs.fluidB.dev/docs/commands/
+    scratch-file-path /path
 
-Installing fluidB
------------------
+If you would like to use the [FLASH backed](https://github.com/JohnSully/fluidB/wiki/FLASH-Storage) storage this option configures the directory for fluidB's temporary files.  This feature relies on snapshotting to work so must be used on a BTRFS filesystem.  ZFS may also work but is untested.  With this feature fluidB will use RAM as a cache and page to disk as necessary.  NOTE: This requires special compilation options, see Building fluidB below.
+    
+    db-s3-object /path/to/bucket
 
-In order to install fluidB binaries into /usr/local/bin just use:
+If you would like fluidB to dump and load directly to AWS S3 this option specifies the bucket.  Using this option with the traditional RDB options will result in fluidB backing up twice to both locations.  If both are specified fluidB will first attempt to load from the local dump file and if that fails load from S3.  This requires the AWS CLI tools to be installed and configured which are used under the hood to transfer the data.
 
-    % make install
+    active-replica yes
 
-You can use `make PREFIX=/some/other/directory install` if you wish to use a
-different destination.
+If you are using active-active replication set `active-replica` option to “yes”. This will enable both instances to accept reads and writes while remaining synced. [Click here](https://docs.fluidB.dev/docs/active-rep/) to see more on active-rep in our docs section. 
 
-Make install will just install binaries in your system, but will not configure
-init scripts and configuration files in the appropriate place. This is not
-needed if you want just to play a bit with fluidB, but if you are installing
-it the proper way for a production system, we have a script doing this
-for Ubuntu and Debian systems:
-
-    % cd utils
-    % ./install_server.sh
-
-_Note_: `install_server.sh` will not work on Mac OSX; it is built for Linux only.
-
-The script will ask you a few questions and will setup everything you need
-to run fluidB properly as a background daemon that will start again on
-system reboots.
-
-You'll be able to stop and start fluidB using the script named
-`/etc/init.d/fluidB_<portnumber>`, for instance `/etc/init.d/fluidB_6379`.
-
-Multithreading Architecture
----------------------------
-
-fluidB works by running the normal Redis event loop on multiple threads.  Network IO, and query parsing are done concurrently.  Each connection is assigned a thread on accept().  Access to the core hash table is guarded by spinlock.  Because the hashtable access is extremely fast this lock has low contention.  Transactions hold the lock for the duration of the EXEC command.  Modules work in concert with the GIL which is only acquired when all server threads are paused.  This maintains the atomicity guarantees modules expect.
-
-Unlike most databases the core data structure is the fastest part of the system.  Most of the query time comes from parsing the REPL protocol and copying data to/from the network.
-
-Future work:
- - Allow rebalancing of connections to different threads after the connection
- - Allow multiple readers access to the hashtable concurrently
+All other configuration options behave as you'd expect.  Your existing configuration files should continue to work unchanged.
 
 
-Code contributions
------------------
 
-Note: by contributing code to the fluidB project in any form, including sending
-a pull request via Github, a code fragment or patch via private email or
-public discussion groups, you agree to release your code under the terms
-of the BSD license that you can find in the COPYING file included in the fluidB
-source distribution.
+<!-- CONTRIBUTING -->
+## Contributing
 
-Please see the CONTRIBUTING file in this source distribution for more
-information.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Grigoriy Safronov - gvsafronov@gmail.com
+
+Project Link: [https://fluidb.icu](https://fluidb.icu)
+
 
 
