@@ -102,19 +102,6 @@ optimizations (for debugging purposes), and other similar build time options,
 those options are cached indefinitely until you issue a `make distclean`
 command.
 
-Fixing problems building 32 bit binaries
----------
-
-If after building fluidB with a 32 bit target you need to rebuild it
-with a 64 bit target, or the other way around, you need to perform a
-`make distclean` in the root directory of the fluidB distribution.
-
-In case of build errors when trying to build a 32 bit binary of fluidB, try
-the following steps:
-
-* Install the packages libc6-dev-i386 (also try g++-multilib).
-* Try using the following command line instead of `make 32bit`:
-  `make CFLAGS="-m32 -march=native" LDFLAGS="-m32"`
 
 Allocator
 ---------
@@ -182,15 +169,15 @@ then in another terminal try the following:
     % ./fluidB-cli
     fluidB> ping
     PONG
-    fluidB> set foo bar
+    fluidB:~> set foo bar
     OK
-    fluidB> get foo
+    fluidB:~> get foo
     "bar"
-    fluidB> incr mycounter
+    fluidB:~> incr mycounter
     (integer) 1
-    fluidB> incr mycounter
+    fluidB:~> incr mycounter
     (integer) 2
-    fluidB>
+    fluidB:~>
 
 You can find the list of all the available commands at https://docs.fluidB.dev/docs/commands/
 
