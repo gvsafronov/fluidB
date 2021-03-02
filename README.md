@@ -15,7 +15,7 @@
   
   <div class="myWrapper" markdown="1">
   
-  ### Distributed Multimodel real-time in memory database management system
+  <p style="text-align: center;">Distributed Multimodel real-time in memory database management system</p> 
 
 </div>
 
