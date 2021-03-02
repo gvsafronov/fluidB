@@ -11,10 +11,9 @@
 <p align="center">
   <a href="https://fluidb.icu"><img src="/img/logo.png" alt="fluidB"></a>
 </p>
-<p align="center">
-  
+
  
-  <p style="text-align: center;">Distributed Multimodel real-time in memory database management system</p> 
+  ### Distributed Multimodel real-time in memory database management system
 
 
 
