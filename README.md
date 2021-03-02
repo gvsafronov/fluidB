@@ -17,7 +17,6 @@
   
   ### Distributed Multimodel real-time in memory database management system
 
-this content is wrapped into a div with class "myWrapper"
 </div>
 
   <br>
