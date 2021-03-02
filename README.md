@@ -13,11 +13,10 @@
 </p>
 <p align="center">
   
-  <div class="myWrapper" markdown="1">
-  
+ 
   <p style="text-align: center;">Distributed Multimodel real-time in memory database management system</p> 
 
-</div>
+
 
   <br>
 
