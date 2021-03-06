@@ -38,6 +38,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#gratitudes">Gratitudes</a></li>
+    <li><a href="#roadmap">System Requirements</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -209,6 +210,17 @@ If you want to see a more verbose output use the following:
 
     % make V=1
 
+
+<!-- System Requirements -->
+## System Requirements
+
+Hardware: Intel or AMD
+RAM: 256 MB (minimal) or above
+Nodes: 2 (for very small cluster)
+Operating System: UNIX-like only (Linux, BSD, OpenIndiana) Windows isn't supported
+
+
+<!-- End of System Requirements -->
 
 
 <!-- ROADMAP -->
