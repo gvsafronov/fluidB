@@ -273,7 +273,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- FAQ -->
 ## FAQ
 
-**This page provides answers to frequently asked questions regarding fluidB.
+#### This page provides answers to frequently asked questions regarding fluidB.
 
 
 * What is the purpose of creating your product? Who is it for?
