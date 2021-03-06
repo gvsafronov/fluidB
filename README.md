@@ -284,37 +284,41 @@ This page provides answers to frequently asked questions regarding fluidB.
 * How is your project different from KeyDB?
 <p>When developing our product, we took KeyDB as a basis, as an improved version of the Redis sub-database, easy and understandable to learn and operate. The difference between fluidB and KeyDB lies in the implementation of a shell module that allows you to run external modules (programs) that extend the basic functionality of the application without explicitly specifying the path to the module in the configuration file.</p>
 
-
+<br>
 * What is a multi-model control system?
 <p>A multi-model subdivision is such a subdivision that allows you to store data using different data storage schemes. For example, along with relational data (stored in the form of tables), data can be stored in the form of graphs, an associative array, etc. Thus, incredible flexibility in storing data is achieved, depending on the type of data, the most suitable tool for storing and processing it is used.</p>
-
+<br>
 
 * Is there a FluidB implementation for the Windows operating system?
 <p>No, there is no implementation of FluidB for the Windows operating system. our application is client-server, with on-board caching subdivision, focused on use mainly on servers, and the vast majority of servers run under the Linux operating system. We do not plan to release a version for Windows in the future.</p>
 
-
+<br>
 * Is FluidB in Linux repositories?
 <p>No, FluidB is still distributed as source and run-ready binaries on GitHub.</p>
 
 * Is there a docker image of the project?
 <p>No, there is no docker image, because docker, like any virtualization environment, forms an additional layer of abstraction, which complicates both the development process itself and the program operation process. Our goal: "To create a high-performance subassembly that is as easy to use as possible"</p>
-
+<br>
 
 * Why are you confident that you will be able to create a high-quality, competitive software product that people need?
 <p>For several reasons. First, because our product is based on the well-proven Redis DBMS. Secondly, our software product is already used as a backend in the ws-stickleback project "Biology and Soil" of the Faculty of the Department of Ichthyology and Hydrobiology, St. Petersburg State University</p>
-
+<br>
 
 * Is there a paid version of your software product with advanced functionality?
-<p>There is such a version, it is calledEnterprise-version, this version includes both the functionality required by the client (discussed individually with each client) and the default functionality. For more information on how the free and paid versions of our product differ, you can visit the page <a href="https://fluidb.icu/enterprise-version/"> "Enterprise-version"</p>
+<p>There is such a version, it is calledEnterprise-version, this version includes both the functionality required by the client (discussed individually with each client) and the default functionality.</p>
+<br>
 
 * How is authorization used?
 <p>In the traditional sense, there is no authorization. We have a funny login form that we wrote to show how you can quickly implement it using JavaScript, it is used by default in our fluwc web interface, where you can make "typical requests" in the browser. FluidB is not intended to be publicly displayed. This is an application that works on the Internet, so we do not have authorization at this stage.</p>
 
+<br>
 
 * How does your product name stand for?
 <p>The name of our project is deciphered as follows: FluidB, this is a reference to the English word "fluid", which means "fluid" - a physical term meaning "a state of matter with parameters above critical", which very accurately characterizes our product. A critical state of a substance means a state in which it disappears the difference between its liquid and vapor phases. <br> This is illustrated by the colors of the logo: At first, there is no load on the application (blue Greek letter "Phi"), then it increases sharply (three red subsequent letters), then the load begins to decrease and evenly distribute- orange symbol, differential, showing the rate of change of the value of the variable during balancing, and finally it is evenly distributed and becomes normal (seventh blue symbol). In our case, it should be interpreted as follows: thanks to our product, the line between low loads and very high loads is erased, i.e. to. it helps balance the load. A couple of words should be said separately about the symbol of the "flower" standing in front of the inscription: It personifies the mathematical graph of objects, tk. our subd is a multi-model supporting graph data storage model.</p>
 
-<p>I have decided to purchase the Enterprise version of your product, where should I contact?</p>
+* I have decided to purchase the Enterprise version of your product, where should I contact?
+
+<p>You shoud write the letter in email: gvsafronov@gmail.com</p>
 
 
 <!-- CONTACT -->
