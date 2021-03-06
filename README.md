@@ -38,7 +38,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#gratitudes">Gratitudes</a></li>
-    <li><a href="#system requirements">System Requirements</a></li>
+    <li><a href="#System Requirements">System Requirements</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
