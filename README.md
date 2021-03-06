@@ -76,7 +76,7 @@ Good example is to think of fluidB as a more complex version of memcached, where
 * Operating System: UNIX-like only (Linux, BSD, OpenIndiana) Windows isn't supported
 
 
-<!-- End of System Requirements -->
+
 
 
 
