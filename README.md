@@ -30,7 +30,8 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#preparations">Preparations</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installation">Installation from source</a></li>
+        <li><a href="#setup">Installation from binary</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -111,7 +112,20 @@ Future work:
    ```
    make BUILD_TLS=yes';
    ```
-   
+ 
+ ### Setup
+ 
+ You can install fluidB download the binary from our site https://fluidb.icu
+ 
+ 1. Open the link above
+ 2. Click to "Download" button
+ 3. Copy the tar-archive in your home directory
+ 4. Open you terminal and then print ($-terminal prompt) `$ tar xvjf archive.tar.bz2`
+ 5. `$ cd fluidb && src`
+ 6. `$ ./fluidb-serv`
+ 
+ 
+ 
 ### Running fluidB
 
 
