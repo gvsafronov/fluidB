@@ -30,8 +30,8 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#preparations">Preparations</a></li>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#setup">Setup</a></li>
+        <li><a href="#building">Building/a></li>
+        <li><a href="#Installation">Installation</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -97,7 +97,7 @@ Future work:
  sudo apt install build-essential nasm autotools-dev autoconf libjemalloc-dev tcl tcl-dev uuid-dev libcurl4-openssl-dev
   ```
 
-### Installation
+### Building
 
 1. Install gcc, g++ and all dependencies (see Prerequisites)
 2. Clone the repo
@@ -113,9 +113,9 @@ Future work:
    make BUILD_TLS=yes';
    ```
  
- ### Setup
+ ### Installation
  
- You can install fluidB download the binary from our site https://fluidb.icu
+ You can install fluidB download the binary from our site https://fluidb.icu/#download
  
  1. Open the link above
  2. Click to "Download" button
