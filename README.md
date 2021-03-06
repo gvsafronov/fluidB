@@ -270,6 +270,7 @@ Contributions are what make the open source community such an amazing place to b
 Distributed under the MIT License. See `LICENSE` for more information.
 
 
+<!-- FAQ -->
 ## FAQ (Frequently Asked Questions)
 
 This page provides answers to frequently asked questions regarding fluidB.
@@ -289,7 +290,7 @@ This page provides answers to frequently asked questions regarding fluidB.
 
 
 * Is there a FluidB implementation for the Windows operating system?
-No, there is no implementation of FluidB for the Windows operating system. our application is client-server, with on-board caching subdivision, focused on use mainly on servers, and the vast majority of servers run under the Linux operating system. We do not plan to release a version for Windows in the future.
+<p>No, there is no implementation of FluidB for the Windows operating system. our application is client-server, with on-board caching subdivision, focused on use mainly on servers, and the vast majority of servers run under the Linux operating system. We do not plan to release a version for Windows in the future.</p>
 
 
 * Is FluidB in Linux repositories?
