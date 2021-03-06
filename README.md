@@ -30,8 +30,8 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#preparations">Preparations</a></li>
-        <li><a href="#installation">Installation from source</a></li>
-        <li><a href="#setup">Installation from binary</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#setup">Setup</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
