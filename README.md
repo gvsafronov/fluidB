@@ -29,7 +29,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#preparations">Preparations</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -88,7 +88,7 @@ Future work:
  - Allow rebalancing of connections to different threads after the connection
  - Allow multiple readers access to the hashtable concurrently
 
-### Prerequisites
+### Preparations
 
 1. Install gcc, g++ and all dependencies
 
