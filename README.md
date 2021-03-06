@@ -30,7 +30,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#preparations">Preparations</a></li>
-        <li><a href="#building">Building/a></li>
+        <li><a href="#building">Building</a></li>
         <li><a href="#Installation">Installation</a></li>
       </ul>
     </li>
