@@ -37,6 +37,7 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#gratitudes">Gratitudes</a></li>
     <li><a href="#requirements">Requirements</a></li>
+    <li><a href="#cases">Cases</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -76,6 +77,18 @@ Good example is to think of fluidB as a more complex version of memcached, where
 <br/><br/>
 
 <!-- GETTING STARTED -->
+
+<br>
+
+## Cases
+
+* Logs ageregation
+* Caching system
+* Queue server
+* Pattern "Central dispatcher" (for sharding)
+
+<br>
+
 ## Getting Started
 
 Multithreading Architecture
