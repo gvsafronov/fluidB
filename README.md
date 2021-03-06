@@ -38,7 +38,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#gratitudes">Gratitudes</a></li>
-    <li><a href="#System Requirements">System Requirements</a></li>
+    <li><a href="#requirements">requirements</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -68,17 +68,13 @@ Good example is to think of fluidB as a more complex version of memcached, where
 
 
 <!-- System Requirements -->
-## System Requirements
+## Requirements
 
 * Hardware: Intel or AMD
 * RAM: 256 MB (minimal) or above
 * Nodes: 2 (for very small cluster)
 * Operating System: UNIX-like only (Linux, BSD, OpenIndiana) Windows isn't supported
-
-
-
-
-
+<br/><br/>
 
 <!-- GETTING STARTED -->
 ## Getting Started
