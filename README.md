@@ -301,7 +301,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 #### This page provides answers to frequently asked questions regarding fluidB.
 
 <br>
-What is the purpose of creating your product? Who is it for?
+* What is the purpose of creating your product? Who is it for?
 
 <p>The key idea of ​​our product is that it solves the problems of processing, storing and analyzing a large amount of continuously incoming data, mainly geolocation data. It is intended primarily for application software developers and DBAs (Database Administrators). Our main goal is to provide the user with a simple yet flexible and functional tool for working with data.</p>
 <br>
