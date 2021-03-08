@@ -298,10 +298,16 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- FAQ -->
 ## FAQ
 
-#### This page provides answers to frequently asked questions regarding fluidB.
+#### This page provides answers to frequently asked questions regarding fluidB
+
+
+
 
 * **What is the main idea of your project?**
 The key idea of our product is that it solves the problems of processing, storing and analyzing a large amount of continuously incoming data, mainly geolocation data. It is intended primarily for application software developers and DBAs (Database Administrators). Our main goal is to provide the user with a simple yet flexible and functional tool for working with data.
+
+
+
 
 
 * **How is your project different from KeyDB?**
@@ -309,25 +315,46 @@ The key idea of our product is that it solves the problems of processing, storin
 When developing our product, we took KeyDB as a basis, as an improved version of the Redis sub-database, easy and understandable to learn and operate. The difference between fluidB and KeyDB lies in the implementation of a shell module that allows you to run external modules (programs) that extend the basic functionality of the application without explicitly specifying the path to the module in the configuration file.
 
 
+
+
+
 * **What is the multi-model database management system?**
 A multi-model subdivision is such a subdivision that allows you to store data using different data storage schemes. For example, along with relational data (stored in the form of tables), data can be stored in the form of graphs, an associative array, etc. Thus, incredible flexibility in storing data is achieved, depending on the type of data, the most suitable tool for storing and processing it is used.
+
+
+
 
 
 * **Is there a FluidB implementation for the Windows operating system?**
 No, there is no implementation of FluidB for the Windows operating system. our application is client-server, with on-board caching subdivision, focused on use mainly on servers, and the vast majority of servers run under the Linux operating system. We do not plan to release a version for Windows in the future.
 
 
+
+
+
 * **Is FluidB in Linux repositories?**
 No, FluidB is still distributed as source and run-ready binaries on GitHub.
+
+
+
 
 * **Is there a docker image of the project?**
 
 No, there is no docker image, because docker, like any virtualization environment, forms an additional layer of abstraction, which complicates both the development process itself and the program operation process. Our goal: "To create a high-performance subassembly that is as easy to use as possible"
 
 
+
+
+
 * **Why are you confident that you will be able to create a high-quality, competitive software product that people need?**
 
+
+
+
 For several reasons. First, because our product is based on the well-proven Redis DBMS. Secondly, our software product is already used as a backend in the ws-stickleback project "Biology and Soil" of the Faculty of the Department of Ichthyology and Hydrobiology, St. Petersburg State University
+
+
+
 
 
 * **Is there a paid version of your software product with advanced functionality?**
@@ -335,9 +362,15 @@ For several reasons. First, because our product is based on the well-proven Redi
 There is such a version, it is calledEnterprise-version, this version includes both the functionality required by the client (discussed individually with each client) and the default functionality.
 
 
+
+
+
 * **How is authorization used?**
 
 In the traditional sense, there is no authorization. We have a funny login form that we wrote to show how you can quickly implement it using JavaScript, it is used by default in our fluwc web interface, where you can make "typical requests" in the browser. FluidB is not intended to be publicly displayed. This is an application that works on the Internet, so we do not have authorization at this stage.
+
+
+
 
 
 * **How does your product name stand for?**
