@@ -302,7 +302,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <br>
 * **What is the main idea?**
-The key idea of ​​our product is that it solves the problems of processing, storing and analyzing a large amount of continuously incoming data, mainly geolocation data. It is intended primarily for application software developers and DBAs (Database Administrators). Our main goal is to provide the user with a simple yet flexible and functional tool for working with data.
+The key idea of our product is that it solves the problems of processing, storing and analyzing a large amount of continuously incoming data, mainly geolocation data. It is intended primarily for application software developers and DBAs (Database Administrators). Our main goal is to provide the user with a simple yet flexible and functional tool for working with data.
 
 
 * **How is your project different from KeyDB?**
