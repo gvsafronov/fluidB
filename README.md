@@ -338,7 +338,7 @@ Is there a paid version of your software product with advanced functionality?
 
 <br>
 
-**How does your product name stand for?
+<b<How does your product name stand for?</b>
 <p>The name of our project is deciphered as follows: FluidB, this is a reference to the English word "fluid", which means "fluid" - a physical term meaning "a state of matter with parameters above critical", which very accurately characterizes our product. A critical state of a substance means a state in which it disappears the difference between its liquid and vapor phases. <br> This is illustrated by the colors of the logo: At first, there is no load on the application (blue Greek letter "Phi"), then it increases sharply (three red subsequent letters), then the load begins to decrease and evenly distribute- orange symbol, differential, showing the rate of change of the value of the variable during balancing, and finally it is evenly distributed and becomes normal (seventh blue symbol). In our case, it should be interpreted as follows: thanks to our product, the line between low loads and very high loads is erased, i.e. to. it helps balance the load. A couple of words should be said separately about the symbol of the "flower" standing in front of the inscription: It personifies the mathematical graph of objects, tk. our subd is a multi-model supporting graph data storage model.</p>
 
 **I have decided to purchase the Enterprise version of your product, where should I contact?
