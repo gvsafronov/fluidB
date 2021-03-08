@@ -321,7 +321,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 **Is FluidB in Linux repositories?**
 <p>No, FluidB is still distributed as source and run-ready binaries on GitHub.</p>
 
-**Is there a docker image of the project?
+**Is there a docker image of the project?**
 <p>No, there is no docker image, because docker, like any virtualization environment, forms an additional layer of abstraction, which complicates both the development process itself and the program operation process. Our goal: "To create a high-performance subassembly that is as easy to use as possible"</p>
 <br>
 
