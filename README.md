@@ -301,10 +301,10 @@ Distributed under the MIT License. See `LICENSE` for more information.
 #### This page provides answers to frequently asked questions regarding fluidB.
 
 <br>
-What is the main idea of your project?
+* **What is the main idea of your project?**
 The key idea of our product is that it solves the problems of processing, storing and analyzing a large amount of continuously incoming data, mainly geolocation data. It is intended primarily for application software developers and DBAs (Database Administrators). Our main goal is to provide the user with a simple yet flexible and functional tool for working with data.
 
-
+<br>
 * **How is your project different from KeyDB?**
 
 When developing our product, we took KeyDB as a basis, as an improved version of the Redis sub-database, easy and understandable to learn and operate. The difference between fluidB and KeyDB lies in the implementation of a shell module that allows you to run external modules (programs) that extend the basic functionality of the application without explicitly specifying the path to the module in the configuration file.
