@@ -313,7 +313,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 **What is the multi-model database management system?**
 <p>A multi-model subdivision is such a subdivision that allows you to store data using different data storage schemes. For example, along with relational data (stored in the form of tables), data can be stored in the form of graphs, an associative array, etc. Thus, incredible flexibility in storing data is achieved, depending on the type of data, the most suitable tool for storing and processing it is used.</p>
 <br>
-
 **Is there a FluidB implementation for the Windows operating system?**
 <p>No, there is no implementation of FluidB for the Windows operating system. our application is client-server, with on-board caching subdivision, focused on use mainly on servers, and the vast majority of servers run under the Linux operating system. We do not plan to release a version for Windows in the future.</p>
 
