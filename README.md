@@ -310,7 +310,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <p>When developing our product, we took KeyDB as a basis, as an improved version of the Redis sub-database, easy and understandable to learn and operate. The difference between fluidB and KeyDB lies in the implementation of a shell module that allows you to run external modules (programs) that extend the basic functionality of the application without explicitly specifying the path to the module in the configuration file.</p>
 
 <br>
-* What is a multi-model control system?
+* What is the multi-model database management system?
 <p>A multi-model subdivision is such a subdivision that allows you to store data using different data storage schemes. For example, along with relational data (stored in the form of tables), data can be stored in the form of graphs, an associative array, etc. Thus, incredible flexibility in storing data is achieved, depending on the type of data, the most suitable tool for storing and processing it is used.</p>
 <br>
 
