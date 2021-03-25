@@ -235,6 +235,10 @@ struct redisCommand redisCommandTable[] = {
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
+      {"tstamp",appendCommand,3,
+     "write use-memory fast @string",
+     0,NULL,1,1,1,0,0,0},
+
     {"strlen",strlenCommand,2,
      "read-only fast @string",
      0,NULL,1,1,1,0,0,0},
@@ -1508,12 +1512,13 @@ void tryResizeHashTables(int dbid) {
  * table will use two tables for a long time. So we try to use 1 millisecond
  * of CPU time at every call of this function to perform some rehashing.
  *
- * The function returns the number of rehashes if some rehashing was performed, otherwise 0
+ * The function returns 1 if some rehashing was performed, otherwise 0
  * is returned. */
 int incrementallyRehash(int dbid) {
     /* Keys dictionary */
     if (dictIsRehashing(g_pserver->db[dbid].dict)) {
-        return dictRehashMilliseconds(g_pserver->db[dbid].dict,1);
+        dictRehashMilliseconds(g_pserver->db[dbid].dict,1);
+        return 1; /* already used our millisecond for this loop... */
     }
     return 0;
 }
@@ -1771,32 +1776,22 @@ bool expireOwnKeys()
     return false;
 }
 
-int hash_spin_worker() {
-    auto ctl = serverTL->rehashCtl;
-    return dictRehashSomeAsync(ctl, 1);
-}
-
 /* This function handles 'background' operations we are required to do
  * incrementally in Redis databases, such as active key expiring, resizing,
  * rehashing. */
-void databasesCron(bool fMainThread) {
-    serverAssert(GlobalLocksAcquired());
-    static int rehashes_per_ms = 0;
-    static int async_rehashes = 0;
-    if (fMainThread) {
-        /* Expire keys by random sampling. Not required for slaves
-        * as master will synthesize DELs for us. */
-        if (g_pserver->active_expire_enabled) {
-            if (expireOwnKeys()) {
-                activeExpireCycle(ACTIVE_EXPIRE_CYCLE_SLOW);
-            } else {
-                expireSlaveKeys();
-            }
+void databasesCron(void) {
+    /* Expire keys by random sampling. Not required for slaves
+     * as master will synthesize DELs for us. */
+    if (g_pserver->active_expire_enabled) {
+        if (expireOwnKeys()) {
+            activeExpireCycle(ACTIVE_EXPIRE_CYCLE_SLOW);
+        } else {
+            expireSlaveKeys();
         }
-
-        /* Defrag keys gradually. */
-        activeDefragCycle();
     }
+
+    /* Defrag keys gradually. */
+    activeDefragCycle();
 
     /* Perform hash tables rehashing if needed, but only if there are no
      * other processes saving the DB on disk. Otherwise rehashing is bad
@@ -1813,68 +1808,27 @@ void databasesCron(bool fMainThread) {
         /* Don't test more DBs than we have. */
         if (dbs_per_call > cserver.dbnum) dbs_per_call = cserver.dbnum;
 
-        if (fMainThread) {
-            /* Resize */
-            for (j = 0; j < dbs_per_call; j++) {
-                tryResizeHashTables(resize_db % cserver.dbnum);
-                resize_db++;
-            }
+        /* Resize */
+        for (j = 0; j < dbs_per_call; j++) {
+            tryResizeHashTables(resize_db % cserver.dbnum);
+            resize_db++;
         }
 
         /* Rehash */
         if (g_pserver->activerehashing) {
             for (j = 0; j < dbs_per_call; j++) {
-                if (serverTL->rehashCtl != nullptr) {
-                    if (dictRehashSomeAsync(serverTL->rehashCtl, 5)) {
-                        break;
-                    } else {
-                        dictCompleteRehashAsync(serverTL->rehashCtl, true /*fFree*/);
-                        serverTL->rehashCtl = nullptr;
-                    }
-                }
-
-                serverAssert(serverTL->rehashCtl == nullptr);
-                /* Are we async rehashing? And if so is it time to re-calibrate? */
-                /* The recalibration limit is a prime number to ensure balancing across threads */
-                if (rehashes_per_ms > 0 && async_rehashes < 131 && !cserver.active_defrag_enabled) {
-                    serverTL->rehashCtl = dictRehashAsyncStart(g_pserver->db[rehash_db].dict, rehashes_per_ms);
-                    ++async_rehashes;
-                }
-                if (serverTL->rehashCtl)
-                    break;
-                
-                // Before starting anything new, can we end the rehash of a blocked thread?
-                if (g_pserver->db[rehash_db].dict->asyncdata != nullptr) {
-                    auto asyncdata = g_pserver->db[rehash_db].dict->asyncdata;
-                    if (asyncdata->done) {
-                        dictCompleteRehashAsync(asyncdata, false /*fFree*/);    // Don't free because we don't own the pointer
-                        serverAssert(g_pserver->db[rehash_db].dict->asyncdata != asyncdata);
-                        break;  // completion can be expensive, don't do anything else
-                    }
-                }
-
-                rehashes_per_ms = incrementallyRehash(rehash_db);
-                async_rehashes = 0;
-                if (rehashes_per_ms > 0) {
+                int work_done = incrementallyRehash(rehash_db);
+                if (work_done) {
                     /* If the function did some work, stop here, we'll do
-                    * more at the next cron loop. */
-                    if (!cserver.active_defrag_enabled) {
-                        serverLog(LL_VERBOSE, "Calibrated rehashes per ms: %d", rehashes_per_ms);
-                    }
+                     * more at the next cron loop. */
                     break;
-                } else if (g_pserver->db[rehash_db].dict->asyncdata == nullptr) {
-                    /* If this db didn't need rehash and we have none in flight, we'll try the next one. */
+                } else {
+                    /* If this db didn't need rehash, we'll try the next one. */
                     rehash_db++;
                     rehash_db %= cserver.dbnum;
                 }
             }
         }
-    }
-
-    if (serverTL->rehashCtl) {
-        setAeLockSetThreadSpinWorker(hash_spin_worker);
-    } else {
-        setAeLockSetThreadSpinWorker(nullptr);
     }
 }
 
@@ -2115,7 +2069,7 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
     clientsCron(IDX_EVENT_LOOP_MAIN);
 
     /* Handle background operations on Redis databases. */
-    databasesCron(true /* fMainThread */);
+    databasesCron();
 
     /* Start a scheduled AOF rewrite if this was requested by the user while
      * a BGSAVE was in progress. */
@@ -2264,9 +2218,6 @@ int serverCronLite(struct aeEventLoop *eventLoop, long long id, void *clientData
     {
         processUnblockedClients(iel);
     }
-
-    /* Handle background operations on Redis databases. */
-    databasesCron(false /* fMainThread */);
 
     /* Unpause clients if enough time has elapsed */
     unpauseClientsIfNecessary();
@@ -2660,7 +2611,7 @@ void initServerConfig(void) {
 
     /* Command table -- we initialize it here as it is part of the
      * initial configuration, since command names may be changed via
-     * fluidb.conf using the rename-command directive. */
+     * fludiB.conf using the rename-command directive. */
     g_pserver->commands = dictCreate(&commandTableDictType,NULL);
     g_pserver->orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
@@ -2692,7 +2643,7 @@ void initServerConfig(void) {
     /* By default we want scripts to be always replicated by effects
      * (single commands executed by the script), and not by sending the
      * script to the replica / AOF. This is the new way starting from
-     * Redis 5. However it is possible to revert it via fluidb.conf. */
+     * Redis 5. However it is possible to revert it via fluidB.conf. */
     g_pserver->lua_always_replicate_commands = 1;
 
     /* Multithreading */
@@ -3423,7 +3374,7 @@ void populateCommandTable(void) {
         c->id = ACLGetCommandID(c->name); /* Assign the ID used for ACL. */
         retval1 = dictAdd(g_pserver->commands, sdsnew(c->name), c);
         /* Populate an additional dictionary that will be unaffected
-         * by rename-command statements in fluidb.conf. */
+         * by rename-command statements in fluidB.conf. */
         retval2 = dictAdd(g_pserver->orig_commands, sdsnew(c->name), c);
         serverAssert(retval1 == DICT_OK && retval2 == DICT_OK);
     }
@@ -4140,7 +4091,7 @@ bool client::postFunction(std::function<void(client *)> fn, bool fLock) {
         std::lock_guard<decltype(this->lock)> lock(this->lock);
         fn(this);
         --casyncOpsPending;
-    }, fLock) == AE_OK;
+    }, false, fLock) == AE_OK;
 }
 
 /*================================== Shutdown =============================== */
@@ -5327,7 +5278,7 @@ void daemonize(void) {
 }
 
 void version(void) {
-    printf("fluidB server v=%s sha=%s:%d malloc=%s bits=%d build=%llx\n",
+    printf("KeyDB server v=%s sha=%s:%d malloc=%s bits=%d build=%llx\n",
         KEYDB_REAL_VERSION,
         redisGitSHA1(),
         atoi(redisGitDirty()) > 0,
@@ -5524,11 +5475,11 @@ void sendChildCOWInfo(int ptype, const char *pname) {
 extern "C" void memtest(size_t megabytes, int passes);
 
 /* Returns 1 if there is --sentinel among the arguments or if
- * argv[0] contains "fluidb-sentinel". */
+ * argv[0] contains "keydb-sentinel". */
 int checkForSentinelMode(int argc, char **argv) {
     int j;
 
-    if (strstr(argv[0],"fluidb-sentinel") != NULL) return 1;
+    if (strstr(argv[0],"keydb-sentinel") != NULL) return 1;
     for (j = 1; j < argc; j++)
         if (!strcmp(argv[j],"--sentinel")) return 1;
     return 0;
@@ -5841,12 +5792,12 @@ int main(int argc, char **argv) {
         initSentinel();
     }
 
-    /* Check if we need to start in fluidb-check-rdb/aof mode. We just execute
+    /* Check if we need to start in keydb-check-rdb/aof mode. We just execute
      * the program main. However the program is part of the Redis executable
      * so that we can easily execute an RDB check on loading errors. */
-    if (strstr(argv[0],"fluidb-check-rdb") != NULL)
+    if (strstr(argv[0],"keydb-check-rdb") != NULL)
         redis_check_rdb_main(argc,(const char**)argv,NULL);
-    else if (strstr(argv[0],"fluidb-check-aof") != NULL)
+    else if (strstr(argv[0],"keydb-check-aof") != NULL)
         redis_check_aof_main(argc,argv);
 
     if (argc >= 2) {
@@ -5918,7 +5869,7 @@ int main(int argc, char **argv) {
     if (cserver.fUsePro) {
         const char *keydb_pro_dir = getenv("KEYDB_PRO_DIRECTORY");
         sds path = sdsnew(keydb_pro_dir);
-        path = sdscat(path, "fluidb-pro-server");
+        path = sdscat(path, "keydb-pro-server");
         execv(path, argv);
         perror("Failed launch the pro binary");
         exit(EXIT_FAILURE);
@@ -5930,7 +5881,7 @@ int main(int argc, char **argv) {
 
     serverLog(LL_WARNING, "oO0OoO0OoO0Oo fluidB is starting oO0OoO0OoO0Oo");
     serverLog(LL_WARNING,
-        "KeyDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
+        "fluidB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
             KEYDB_REAL_VERSION,
             (sizeof(long) == 8) ? 64 : 32,
             redisGitSHA1(),
