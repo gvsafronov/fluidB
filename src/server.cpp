@@ -235,7 +235,7 @@ struct redisCommand redisCommandTable[] = {
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
-      {"tstamp",appendCommand,3,
+    {"tstamp",appendCommand,3,
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
