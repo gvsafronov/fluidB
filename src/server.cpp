@@ -235,7 +235,7 @@ struct redisCommand redisCommandTable[] = {
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
-    {"tstamp",appendCommand,3,
+      {"tstamp",appendCommand,3,
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
@@ -2504,7 +2504,7 @@ void initMasterInfo(redisMaster *master)
     else
         master->masteruser = NULL;
 
-    master->masterport = 6379;
+    master->masterport = 9470;
     master->master = NULL;
     master->cached_master = NULL;
     master->master_initial_offset = -1;
@@ -5278,7 +5278,7 @@ void daemonize(void) {
 }
 
 void version(void) {
-    printf("KeyDB server v=%s sha=%s:%d malloc=%s bits=%d build=%llx\n",
+    printf("fluidB server v=%s sha=%s:%d malloc=%s bits=%d build=%llx\n",
         KEYDB_REAL_VERSION,
         redisGitSHA1(),
         atoi(redisGitDirty()) > 0,
@@ -5296,7 +5296,7 @@ void usage(void) {
     fprintf(stderr,"       ./fluidb-serv --test-memory <megabytes>\n\n");
     fprintf(stderr,"Examples:\n");
     fprintf(stderr,"       ./fluidb-serv (run the server with default conf)\n");
-    fprintf(stderr,"       ./fluidb-serv /etc/redis/6379.conf\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/fluidb/9470.conf\n");
     fprintf(stderr,"       ./fluidb-serv --port 7777\n");
     fprintf(stderr,"       ./fluidb-serv --port 7777 --replicaof 127.0.0.1 8888\n");
     fprintf(stderr,"       ./fluidb-serv /etc/myfluidb.conf --loglevel verbose\n\n");
@@ -5889,7 +5889,7 @@ int main(int argc, char **argv) {
             (int)getpid());
 
     if (argc == 1) {
-        serverLog(LL_WARNING, "WARNING: no config file specified, using the default config. In order to specify a config file use %s /path/to/%s.conf", argv[0], g_pserver->sentinel_mode ? "sentinel" : "redis");
+        serverLog(LL_WARNING, "WARNING: no config file specified, using the default config. In order to specify a config file use %s /path/to/%s.conf" , argv[0], g_pserver->sentinel_mode ? "sentinel" : "fluidb");
     } else {
         serverLog(LL_WARNING, "Configuration loaded");
     }
