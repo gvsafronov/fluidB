@@ -38,7 +38,7 @@
     <li><a href="#gratitudes">Gratitudes</a></li>
     <li><a href="#requirements">Requirements</a></li>
     <li><a href="#cases">Cases</a></li>
-    <li><a href="#source code layout">source code layout</a></li>
+    <li><a href="#structure">Strucrure</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
