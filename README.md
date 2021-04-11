@@ -104,9 +104,9 @@ calls the real Makefile inside the `src` directory.
 
 Inside the root are the following important directories:
 
-* `src`: contains the Redis implementation, written in C.
+* `src`: contains the fluidB implementation, written in C++.
 * `tests`: contains the unit tests, implemented in Tcl.
-* `deps`: contains libraries Redis uses. Everything needed to compile Redis is inside this directory; your system just needs to provide `libc`, a POSIX compatible interface and a C compiler. Notably `deps` contains a copy of `jemalloc`, which is the default allocator of fluidB under Linux. Note that under `deps` there are also things which started with the fluidB project.
+* `deps`: contains libraries fluidB uses. Everything needed to compile Redis is inside this directory; your system just needs to provide `libc`, a POSIX compatible interface and a C compiler. Notably `deps` contains a copy of `jemalloc`, which is the default allocator of fluidB under Linux. Note that under `deps` there are also things which started with the fluidB project.
 
 There are a few more directories but they are not very important for our goals
 here. We'll focus mostly on `src`, where the fluidB implementation is contained,
