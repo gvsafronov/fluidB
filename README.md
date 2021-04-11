@@ -38,6 +38,7 @@
     <li><a href="#gratitudes">Gratitudes</a></li>
     <li><a href="#requirements">Requirements</a></li>
     <li><a href="#cases">Cases</a></li>
+    <li><a href="#source code layout">source code layout</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -58,6 +59,8 @@ We do not have a docker image since docker, like any virtualization environment,
 fluidB is often referred to as a data structures server. What this means is that fluidB provides access to mutable data structures via a set of commands, which are sent using a server-client model with TCP sockets and a simple protocol. So different processes can query and modify the same data structures in a shared way. The storage of fluidB is implemented as follows: data can be stored according to the "key-value" model, or can be stored as a graph, which is a chain of interrelated events (which are similar to frames from an old film strip), which together represent a description of some event.
 
 Good example is to think of fluidB as a more complex version of memcached, where the operations are not just SETs and GETs, but operations that work with complex data types like Lists, Sets, ordered data structures, and so forth.
+
+
 
 
 ## Gratitudes
@@ -91,6 +94,26 @@ Good example is to think of fluidB as a more complex version of memcached, where
 <br>
 
 ## Getting Started
+
+
+### Source code layout
+
+
+The Redis root directory just contains this README, the Makefile which
+calls the real Makefile inside the `src` directory. 
+
+Inside the root are the following important directories:
+
+* `src`: contains the Redis implementation, written in C.
+* `tests`: contains the unit tests, implemented in Tcl.
+* `deps`: contains libraries Redis uses. Everything needed to compile Redis is inside this directory; your system just needs to provide `libc`, a POSIX compatible interface and a C compiler. Notably `deps` contains a copy of `jemalloc`, which is the default allocator of fluidB under Linux. Note that under `deps` there are also things which started with the fluidB project.
+
+There are a few more directories but they are not very important for our goals
+here. We'll focus mostly on `src`, where the fluidB implementation is contained,
+exploring what there is inside each file. The order in which files are
+exposed is the logical one to follow in order to disclose different layers
+of complexity incrementally.
+
 
 Multithreading Architecture
 ---------------------------
