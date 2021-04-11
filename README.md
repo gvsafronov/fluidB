@@ -38,7 +38,7 @@
     <li><a href="#gratitudes">Gratitudes</a></li>
     <li><a href="#requirements">Requirements</a></li>
     <li><a href="#cases">Cases</a></li>
-    <li><a href="#structure">Strucrure</a></li>
+    <li><a href="#structure">Structure</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -96,7 +96,7 @@ Good example is to think of fluidB as a more complex version of memcached, where
 ## Getting Started
 
 
-### Source code layout
+### Structure
 
 
 The Redis root directory just contains this README, the Makefile which
