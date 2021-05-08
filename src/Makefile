@@ -294,19 +294,19 @@ QUIET_LINK = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(EN
 QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR);
 endif
 
-REDIS_SERVER_NAME=keydb-server$(PROG_SUFFIX)
+REDIS_SERVER_NAME=fluidb-serv$(PROG_SUFFIX)
 REDIS_SENTINEL_NAME=keydb-sentinel$(PROG_SUFFIX)
 REDIS_SERVER_OBJ=adlist.o quicklist.o ae.o anet.o dict.o server.o sds.o zmalloc.o lzf_c.o lzf_d.o pqsort.o zipmap.o sha1.o ziplist.o release.o networking.o util.o object.o db.o replication.o rdb.o t_string.o t_list.o t_set.o t_zset.o t_hash.o t_nhash.o config.o aof.o pubsub.o multi.o debug.o sort.o intset.o syncio.o cluster.o crc16.o endianconv.o slowlog.o scripting.o bio.o rio.o rand.o memtest.o crcspeed.o crc64.o bitops.o sentinel.o notify.o setproctitle.o blocked.o hyperloglog.o latency.o sparkline.o redis-check-rdb.o redis-check-aof.o geo.o lazyfree.o module.o evict.o expire.o geohash.o geohash_helper.o childinfo.o defrag.o siphash.o rax.o t_stream.o listpack.o localtime.o acl.o storage.o rdb-s3.o fastlock.o new.o tracking.o cron.o connection.o tls.o sha256.o motd.o timeout.o setcpuaffinity.o $(ASM_OBJ)
-REDIS_CLI_NAME=keydb-cli$(PROG_SUFFIX)
+REDIS_CLI_NAME=clif$(PROG_SUFFIX)
 REDIS_CLI_OBJ=anet.o adlist.o dict.o redis-cli.o redis-cli-cpphelper.o zmalloc.o release.o anet.o ae.o crcspeed.o crc64.o siphash.o crc16.o storage-lite.o fastlock.o new.o motd.o $(ASM_OBJ)
-REDIS_BENCHMARK_NAME=keydb-benchmark$(PROG_SUFFIX)
+REDIS_BENCHMARK_NAME=fluidb-benchmark$(PROG_SUFFIX)
 REDIS_BENCHMARK_OBJ=ae.o anet.o redis-benchmark.o adlist.o dict.o zmalloc.o siphash.o redis-benchmark.o storage-lite.o fastlock.o new.o $(ASM_OBJ)
-REDIS_CHECK_RDB_NAME=keydb-check-rdb$(PROG_SUFFIX)
-REDIS_CHECK_AOF_NAME=keydb-check-aof$(PROG_SUFFIX)
+REDIS_CHECK_RDB_NAME=fluidb-check-rdb$(PROG_SUFFIX)
+REDIS_CHECK_AOF_NAME=fluidb-check-aof$(PROG_SUFFIX)
 
 all: $(REDIS_SERVER_NAME) $(REDIS_SENTINEL_NAME) $(REDIS_CLI_NAME) $(REDIS_BENCHMARK_NAME) $(REDIS_CHECK_RDB_NAME) $(REDIS_CHECK_AOF_NAME)
 	@echo ""
-	@echo "Hint: It's a good idea to run 'make test' ;)"
+	@echo "Try to enjoy our product. Hint: It's a good idea to run 'make test' :-)"
 	@echo ""
 
 Makefile.dep:

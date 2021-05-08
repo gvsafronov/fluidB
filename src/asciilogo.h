@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2009-2012, Salvatore Sanfilippo <antirez at gmail dot com>
+ * Copyright (c) 2020 Grigorii Safronov <gvsafronov at yandex dot ru>
  * All rights reserved.
+ * 
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,21 +30,18 @@
  */
 
 const char *ascii_logo =
-"                                                                      \n"
-"                  _                                                   \n"
-"               _-(+)-_                                                \n"
-"            _-- /   \\ --_                                            \n"
-"         _--   /     \\   --_            KeyDB %s (%s/%d) %s bit      \n"
-"     __--     /       \\     --__                                     \n"
-"    (+) _    /         \\    _ (+)       Running in %s mode\n"
-"     |   -- /           \\ --   |        Port: %d\n"
-"     |     /--_   _   _--\\     |        PID: %ld\n"
-"     |    /     -(+)-     \\    |                                     \n"
-"     |   /        |        \\   |        https://docs.keydb.dev       \n"
-"     |  /         |         \\  |                                     \n"
-"     | /          |          \\ |                                     \n"
-"    (+)_ -- -- -- | -- -- -- _(+)                                    \n"
-"        --_       |       _--                                         \n"
-"            --_   |   _--                                             \n"
-"                -(+)-        %s\n"
-"                                                                     \n";
+"                                                                  \n"
+"                                                                   \n"
+"                                               fluidB version %s (%s/%d) %s bit\n"  
+"                                                                       \n"
+"                                               Running in %s mode\n"  
+"   __ _       _     _ ____                     Port: %d\n"              
+"  / _| |     (_)   | |  _  |                   PID: %ld\n"          
+" | |_| |_   _ _  __| | |_) |                                           \n"
+" |  _| | | | | |/ _` |  _ <                    https://fluidb.icu      \n"
+" | | | | |_| | | (_| | |_) |                                           \n"
+" |_| |_||__,_|_||__,_|____/|                                           \n"
+"                                                                       \n"
+"                                                                       \n"
+"                                                                       \n\n";
+

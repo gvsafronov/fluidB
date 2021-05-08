@@ -235,6 +235,10 @@ struct redisCommand redisCommandTable[] = {
      "write use-memory fast @string",
      0,NULL,1,1,1,0,0,0},
 
+    {"timst",appendCommand,3,
+     "write use-memory fast @string",
+     0,NULL,1,1,1,0,0,0},
+
     {"strlen",strlenCommand,2,
      "read-only fast @string",
      0,NULL,1,1,1,0,0,0},
@@ -2504,7 +2508,7 @@ void initMasterInfo(redisMaster *master)
     else
         master->masteruser = NULL;
 
-    master->masterport = 6379;
+    master->masterport = 9470;
     master->master = NULL;
     master->cached_master = NULL;
     master->master_initial_offset = -1;
@@ -5277,19 +5281,19 @@ void version(void) {
 }
 
 void usage(void) {
-    fprintf(stderr,"Usage: ./keydb-server [/path/to/keydb.conf] [options]\n");
-    fprintf(stderr,"       ./keydb-server - (read config from stdin)\n");
-    fprintf(stderr,"       ./keydb-server -v or --version\n");
-    fprintf(stderr,"       ./keydb-server -h or --help\n");
-    fprintf(stderr,"       ./keydb-server --test-memory <megabytes>\n\n");
+    fprintf(stderr,"Usage: ./fluidb-serv [/path/to/keydb.conf] [options]\n");
+    fprintf(stderr,"       ./fluidb-serv - (read config from stdin)\n");
+    fprintf(stderr,"       ./fluidb-serv -v or --version\n");
+    fprintf(stderr,"       ./fluidb-serv -h or --help\n");
+    fprintf(stderr,"       ./fluidb-serv --test-memory <megabytes>\n\n");
     fprintf(stderr,"Examples:\n");
-    fprintf(stderr,"       ./keydb-server (run the server with default conf)\n");
-    fprintf(stderr,"       ./keydb-server /etc/redis/6379.conf\n");
-    fprintf(stderr,"       ./keydb-server --port 7777\n");
-    fprintf(stderr,"       ./keydb-server --port 7777 --replicaof 127.0.0.1 8888\n");
-    fprintf(stderr,"       ./keydb-server /etc/mykeydb.conf --loglevel verbose\n\n");
+    fprintf(stderr,"       ./fluidb-serv (run the server with default conf)\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/redis/6379.conf\n");
+    fprintf(stderr,"       ./fluidb-serv --port 7777\n");
+    fprintf(stderr,"       ./fluidb-serv --port 7777 --replicaof 127.0.0.1 8888\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/mykeydb.conf --loglevel verbose\n\n");
     fprintf(stderr,"Sentinel mode:\n");
-    fprintf(stderr,"       ./keydb-server /etc/sentinel.conf --sentinel\n");
+    fprintf(stderr,"       ./fluidb-serv /etc/sentinel.conf --sentinel\n");
     exit(1);
 }
 
@@ -5805,7 +5809,7 @@ int main(int argc, char **argv) {
                 exit(0);
             } else {
                 fprintf(stderr,"Please specify the amount of memory to test in megabytes.\n");
-                fprintf(stderr,"Example: ./keydb-server --test-memory 4096\n\n");
+                fprintf(stderr,"Example: ./fluidb-serv --test-memory 4096\n\n");
                 exit(1);
             }
         }
@@ -5868,9 +5872,9 @@ int main(int argc, char **argv) {
     int background = cserver.daemonize && !cserver.supervised;
     if (background) daemonize();
 
-    serverLog(LL_WARNING, "oO0OoO0OoO0Oo KeyDB is starting oO0OoO0OoO0Oo");
+    serverLog(LL_WARNING, "oO0OoO0OoO0Oo fluidB is starting oO0OoO0OoO0Oo");
     serverLog(LL_WARNING,
-        "KeyDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
+        "fluiDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
             KEYDB_REAL_VERSION,
             (sizeof(long) == 8) ? 64 : 32,
             redisGitSHA1(),
@@ -5878,7 +5882,7 @@ int main(int argc, char **argv) {
             (int)getpid());
 
     if (argc == 1) {
-        serverLog(LL_WARNING, "WARNING: no config file specified, using the default config. In order to specify a config file use %s /path/to/%s.conf", argv[0], g_pserver->sentinel_mode ? "sentinel" : "keydb");
+        serverLog(LL_WARNING, "WARNING: no config file specified, using the default config. In order to specify a config file use %s /path/to/%s.conf", argv[0], g_pserver->sentinel_mode ? "sentinel" : "fluidb");
     } else {
         serverLog(LL_WARNING, "Configuration loaded");
     }
