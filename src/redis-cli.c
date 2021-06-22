@@ -125,6 +125,10 @@ static long long ustime(void) {
 
 static long long mstime(void) {
     return ustime()/1000;
+
+printf("\n");
+printf("\n");
+
 }
 
 static void cliRefreshPrompt(void) {
@@ -132,7 +136,7 @@ static void cliRefreshPrompt(void) {
 
     sds prompt = sdsempty();
     if (config.hostsocket != NULL) {
-        prompt = sdscatfmt(prompt,"redis %s",config.hostsocket);
+        prompt = sdscatfmt(prompt,"fluidb",config.hostsocket);
     } else {
         char addr[256];
         anetFormatAddr(addr, sizeof(addr), config.hostip, config.hostport);
@@ -148,7 +152,7 @@ static void cliRefreshPrompt(void) {
         prompt = sdscatlen(prompt,"(TX)",4);
 
     /* Copy the prompt in the static buffer. */
-    prompt = sdscatlen(prompt,"> ",2);
+     prompt = sdscatlen(prompt,"fluidb:~> ", 9);
     snprintf(config.prompt,sizeof(config.prompt),"%s",prompt);
     sdsfree(prompt);
 }

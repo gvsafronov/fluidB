@@ -74,7 +74,7 @@
 #endif
 
 int g_fTestMode = false;
-const char *motd_url = "http://api.keydb.dev/motd/motd_server.txt";
+const char *motd_url = "";
 const char *motd_cache_file = "/.keydb-server-motd";
 
 /* Our shared "common" objects */
@@ -5937,20 +5937,20 @@ void version(void) {
 }
 
 void usage(void) {
-    fprintf(stderr,"Usage: ./keydb-server [/path/to/keydb.conf] [options] [-]\n");
-    fprintf(stderr,"       ./keydb-server - (read config from stdin)\n");
-    fprintf(stderr,"       ./keydb-server -v or --version\n");
-    fprintf(stderr,"       ./keydb-server -h or --help\n");
-    fprintf(stderr,"       ./keydb-server --test-memory <megabytes>\n\n");
+    fprintf(stderr,"Usage: ./fluidb-server [/path/to/keydb.conf] [options] [-]\n");
+    fprintf(stderr,"       ./fluidb-server - (read config from stdin)\n");
+    fprintf(stderr,"       ./fluidb-server -v or --version\n");
+    fprintf(stderr,"       ./fluidb-server -h or --help\n");
+    fprintf(stderr,"       ./fluidb-server --test-memory <megabytes>\n\n");
     fprintf(stderr,"Examples:\n");
-    fprintf(stderr,"       ./keydb-server (run the server with default conf)\n");
-    fprintf(stderr,"       ./keydb-server /etc/keydb/6379.conf\n");
-    fprintf(stderr,"       ./keydb-server --port 7777\n");
-    fprintf(stderr,"       ./keydb-server --port 7777 --replicaof 127.0.0.1 8888\n");
-    fprintf(stderr,"       ./keydb-server /etc/mykeydb.conf --loglevel verbose -\n");
-    fprintf(stderr,"       ./keydb-server /etc/mykeydb.conf --loglevel verbose\n\n");
+    fprintf(stderr,"       ./fluidb-server (run the server with default conf)\n");
+    fprintf(stderr,"       ./fluidb-server /etc/fluidb/6379.conf\n");
+    fprintf(stderr,"       ./fluidb-server --port 7777\n");
+    fprintf(stderr,"       ./fluidb-server --port 7777 --replicaof 127.0.0.1 8888\n");
+    fprintf(stderr,"       ./fluidb-server /etc/myfluidb.conf --loglevel verbose -\n");
+    fprintf(stderr,"       ./fluidb-server /etc/myfluidb.conf --loglevel verbose\n\n");
     fprintf(stderr,"Sentinel mode:\n");
-    fprintf(stderr,"       ./keydb-server /etc/sentinel.conf --sentinel\n");
+    fprintf(stderr,"       ./fluidb-server /etc/sentinel.conf --sentinel\n");
     exit(1);
 }
 
@@ -5965,7 +5965,7 @@ void redisAsciiArt(void) {
 
     /* Show the ASCII logo if: log file is stdout AND stdout is a
      * tty AND syslog logging is disabled. Also show logo if the user
-     * forced us to do so via keydb.conf. */
+     * forced us to do so via fluidb.conf. */
     int show_logo = ((!g_pserver->syslog_enabled &&
                       g_pserver->logfile[0] == '\0' &&
                       isatty(fileno(stdout))) ||
@@ -6268,7 +6268,7 @@ void sendChildInfo(childInfoType info_type, size_t keys, const char *pname) {
 extern "C" void memtest(size_t megabytes, int passes);
 
 /* Returns 1 if there is --sentinel among the arguments or if
- * argv[0] contains "keydb-sentinel". */
+ * argv[0] contains "fluidb-sentinel". */
 int checkForSentinelMode(int argc, char **argv) {
     int j;
 
@@ -6330,7 +6330,7 @@ void loadDataFromDisk(void) {
 void redisOutOfMemoryHandler(size_t allocation_size) {
     serverLog(LL_WARNING,"Out Of Memory allocating %zu bytes!",
         allocation_size);
-    serverPanic("KeyDB aborting for OUT OF MEMORY. Allocating %zu bytes!", 
+    serverPanic("fluidb aborting for OUT OF MEMORY. Allocating %zu bytes!", 
         allocation_size);
 }
 
@@ -6470,7 +6470,7 @@ int redisIsSupervised(int mode) {
     } else if (mode == SUPERVISED_SYSTEMD) {
         serverLog(LL_WARNING,
             "WARNING supervised by systemd - you MUST set appropriate values for TimeoutStartSec and TimeoutStopSec in your service unit.");
-        return redisCommunicateSystemd("STATUS=KeyDB is loading...\n");
+        return redisCommunicateSystemd("STATUS=fluidb is loading...\n");
     }
 
     switch (mode) {
@@ -6568,7 +6568,7 @@ static void validateConfiguration()
 
     if (g_pserver->enable_multimaster && !g_pserver->fActiveReplica) {
         serverLog(LL_WARNING, "ERROR: Multi Master requires active replication to be enabled.");
-        serverLog(LL_WARNING, "\tKeyDB will now exit.  Please update your configuration file.");
+        serverLog(LL_WARNING, "\tfluidb will now exit.  Please update your configuration file.");
         exit(EXIT_FAILURE);
     }
 }
@@ -6708,7 +6708,7 @@ int main(int argc, char **argv) {
         initSentinel();
     }
 
-    /* Check if we need to start in keydb-check-rdb/aof mode. We just execute
+    /* Check if we need to start in fluidb-check-rdb/aof mode. We just execute
      * the program main. However the program is part of the Redis executable
      * so that we can easily execute an RDB check on loading errors. */
     if (strstr(argv[0],"keydb-check-rdb") != NULL)
@@ -6731,7 +6731,7 @@ int main(int argc, char **argv) {
                 exit(0);
             } else {
                 fprintf(stderr,"Please specify the amount of memory to test in megabytes.\n");
-                fprintf(stderr,"Example: ./keydb-server --test-memory 4096\n\n");
+                fprintf(stderr,"Example: ./fluidb-server --test-memory 4096\n\n");
                 exit(1);
             }
         }
@@ -6787,7 +6787,7 @@ int main(int argc, char **argv) {
     int background = cserver.daemonize && !cserver.supervised;
     if (background) daemonize();
 
-    serverLog(LL_WARNING, "oO0OoO0OoO0Oo KeyDB is starting oO0OoO0OoO0Oo");
+    serverLog(LL_WARNING, "oO0OoO0OoO0Oo fluidB is starting oO0OoO0OoO0Oo");
     serverLog(LL_WARNING,
         "KeyDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
             KEYDB_REAL_VERSION,
@@ -6797,7 +6797,7 @@ int main(int argc, char **argv) {
             (int)getpid());
 
     if (argc == 1) {
-        serverLog(LL_WARNING, "Warning: no config file specified, using the default config. In order to specify a config file use %s /path/to/keydb.conf", argv[0]);
+        serverLog(LL_WARNING, "Warning: no config file specified, using the default config. In order to specify a config file use %s /path/to/fluidb.conf", argv[0]);
     } else {
         serverLog(LL_WARNING, "Configuration loaded");
     }
