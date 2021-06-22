@@ -6789,7 +6789,7 @@ int main(int argc, char **argv) {
 
     serverLog(LL_WARNING, "oO0OoO0OoO0Oo fluidB is starting oO0OoO0OoO0Oo");
     serverLog(LL_WARNING,
-        "KeyDB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
+        "fluidB version=%s, bits=%d, commit=%s, modified=%d, pid=%d, just started",
             KEYDB_REAL_VERSION,
             (sizeof(long) == 8) ? 64 : 32,
             redisGitSHA1(),
