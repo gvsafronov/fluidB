@@ -124,7 +124,7 @@ Future work:
  - Allow rebalancing of connections to different threads after the connection
  - Allow multiple readers access to the hashtable concurrently
 
-### Preparations
+### Preparations (for Debian-based distributes: Ubuntu, ElementaryOS etc)
 
 1. Install gcc, g++ and all dependencies
 
