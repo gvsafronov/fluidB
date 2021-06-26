@@ -80,7 +80,6 @@ Good example is to think of fluidB as a more complex version of memcached, where
 
 <!-- GETTING STARTED -->
 
-<br>
 
 ## Cases
 
