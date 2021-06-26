@@ -124,15 +124,50 @@ Future work:
  - Allow rebalancing of connections to different threads after the connection
  - Allow multiple readers access to the hashtable concurrently
 
-### Preparations (for Debian-based distributes: Ubuntu, ElementaryOS etc)
+### Installatiion dependencies Ubuntu/Debian
 
-1. Install gcc, g++ and all dependencies
+Upade and then Install gcc, g++ and all dependencies
+
+```sh
+ sudo apt update```
+
 
   ```sh
  sudo apt install build-essential nasm autotools-dev autoconf libjemalloc-dev tcl tcl-dev uuid-dev libcurl4-openssl-dev
   ```
-
-### Building
+  
+  ### Installatiion dependencies Archlinux/Manjaro Linux
+  
+  ```sh
+  pacman -Syu --noconfirm
+  pacman -S --noconfirm base-devel git tcl
+  ```
+  
+ ### Installatiion dependencies CentOS 7
+ 
+ ```sh
+ 
+sudo yum install -y scl-utils centos-release-scl
+sudo yum install -y devtoolset-7 libuuid-devel
+sudo source scl_source enable devtoolset-7
+sudo yum install -y openssl openssl-devel curl-devel devtoolset-7-libatomic-devel tcl tcl-devel git wget epel-release
+sudo yum install -y tcltls libzstd
+```
+  
+ ### Installatiion dependencies CentOS 8
+ 
+ ```sh
+yum install -y scl-utils epel-release
+dnf group install -y "Development Tools"
+yum install -y 'dnf-command(config-manager)'
+yum install -y dnf-plugins-core
+dnf config-manager --set-enabled powertools
+yum install -y libuuid-devel which libatomic
+yum install -y openssl openssl-devel curl-devel git
+yum install -y tcl-devel tcltls
+```
+  
+### Building (for all distribuitions)
 
 1. Install gcc, g++ and all dependencies (see Prerequisites)
 2. Clone the repo
